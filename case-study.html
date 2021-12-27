@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dự an đầu tay</title>
+</head>
+<script src="case-study02.js"></script>
+<script src="case-study.js"></script>
+<canvas id="myCanvas" width="800" height="700" style="border: solid 1px"></canvas>
+
+<body>
+<script>
+    let cavas = document.getElementById('myCanvas');
+    let ctx = cavas.getContext('2d');
+    let mykhung = new CaseStudy(150, 500, 100, 100, 100, 'img/space.png');
+    let mycay = new CaseStudy02(800, 550, 50, 50, 'img/cay.png');
+    let backgroundimg = new CaseStudy(0, 0, 800, 700, 0, 'img/game.png');
+    let nut = new CaseStudy(50, 50, 50, 50, 0, 'img/nut.png');
+    let jump = 0;
+    nut.drawkung(ctx);
+    mykhung.drawkung(ctx);
+    backgroundimg.drawkung(ctx);
+    mycay.drawCay(ctx);
+    function movekhung(event) {
+        switch (event.keyCode) {
+            case 32: {
+                jump =0;
+                mykhung.moveNhay();
+                break;
+            }
+        }
+        obitoCanvas();
+    }
+    function clearCanvas() {
+        ctx.clearRect(0, 0, 1500, 700);
+    }
+    function movemyCay() {
+        mycay.moveLeft();
+        obitoCanvas();
+        if(mykhung._y==400){
+            jump +=1;
+            if(jump >5){
+                mykhung._y=500;
+            }
+        }
+        // jumpDown();
+        let a=mycay.vacham(mykhung._y);
+        if (a===true){
+            clearInterval(id)// xóa bỏ setInterval
+        }
+    }
+    function jumpDown(){
+        jump += 10;
+        if(jump > 350){
+            mykhung._y = 500;
+        }
+    }
+    function obitoCanvas() {
+        clearCanvas();
+        backgroundimg.drawkung(ctx);
+        mycay.drawCay(ctx);
+        mykhung.drawkung(ctx);
+        nut.drawkung(ctx);
+    }
+    function getMousePosition(canvas, event) {
+        let rect = canvas.getBoundingClientRect();
+        let x = event.clientX - rect.left;
+        let y = event.clientY - rect.top;
+        console.log("Coordinate x: " + x,
+            "Coordinate y: " + y);
+        if (x < 101 && x > 47 && y < 96 && y > 53) {
+            mykhung._x = 150;
+            mykhung._y = 500;
+            mycay._x = 600;
+            mycay._y = 550;
+            id = setInterval(movemyCay, 150);
+
+        }
+    }
+    let canvasElem = document.querySelector("canvas");
+    canvasElem.addEventListener("mousedown", function (e) {
+        getMousePosition(canvasElem, e);
+    });
+    let id = setInterval(movemyCay, 150);
+    document.addEventListener('keydown', movekhung);
+</script>
+</body>
+</html>
